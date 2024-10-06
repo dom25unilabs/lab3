@@ -27,6 +27,17 @@ static double f(double x, double a, double b, double c)
 	}
 }
 constexpr int N = 15, M = 5;
+constexpr wchar_t LINE_LR = L'\u2550';
+constexpr wchar_t LINE_TB = L'\u2551';
+constexpr wchar_t LINE_TR = L'\u2554';
+constexpr wchar_t LINE_TL = L'\u2557';
+constexpr wchar_t LINE_BR = L'\u255A';
+constexpr wchar_t LINE_BL = L'\u255D';
+constexpr wchar_t LINE_TBR = L'\u2560';
+constexpr wchar_t LINE_TBL = L'\u2563';
+constexpr wchar_t LINE_BRL = L'\u2566';
+constexpr wchar_t LINE_TRL = L'\u2569';
+constexpr wchar_t LINE_TLBR = L'\u256C';
 int wmain(int argc, wchar_t* argv[])
 {
 	if (!(_setmode(_fileno(stdout), _O_U8TEXT) && _setmode(_fileno(stdin), _O_U8TEXT) && _setmode(_fileno(stderr), _O_U8TEXT)))
@@ -88,41 +99,41 @@ int wmain(int argc, wchar_t* argv[])
 	const int ALIGN_W = maxlen;
 	if (!autoui)
 	{
-		std::wcout << L'\u2554';
+		std::wcout << LINE_TR;
 		for (int i = 0; i < N+1; i++)
 		{
 			for (int j = 0; j < ALIGN_W; j++)
 			{
-				std::wcout << L'\u2550';
+				std::wcout << LINE_LR;
 			}
 			if (i < N)
 			{
-				std::wcout << L'\u2566';
+				std::wcout << LINE_BRL;
 			}
 		}
-		std::wcout << L'\u2557' << '\n' << L'\u2551';
+		std::wcout << LINE_TL << '\n' << LINE_TB;
 		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "idx";
-		std::wcout << L'\u2551';
+		std::wcout << LINE_TB;
 		for (int i = 0; i < N; i++)
 		{
 			std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << i;
-			std::wcout << L'\u2551';
+			std::wcout << LINE_TB;
 		}
-		std::wcout << '\n' << L'\u2560';
+		std::wcout << '\n' << LINE_TBR;
 		for (int i = 0; i < N+1; i++)
 		{
 			for (int j = 0; j < ALIGN_W; j++)
 			{
-				std::wcout << L'\u2550';
+				std::wcout << LINE_LR;
 			}
 			if (i < N)
 			{
-				std::wcout << L'\u256C';
+				std::wcout << LINE_TLBR;
 			}
 		}
-		std::wcout << L'\u2563' << '\n' << L'\u2551';
+		std::wcout << LINE_TBL << '\n' << LINE_TB;
 		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a1";
-		std::wcout << L'\u2551';
+		std::wcout << LINE_TB;
 	}
 	for (int i = 0; i < N; i++)
 	{
@@ -142,26 +153,26 @@ int wmain(int argc, wchar_t* argv[])
 		else
 		{
 			std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a1[i];
-			std::wcout << L'\u2551';
+			std::wcout << LINE_TB;
 		}
 	}
 	if (!autoui) 
 	{
-		std::wcout << '\n' << L'\u2560';
+		std::wcout << '\n' << LINE_TBR;
 		for (int i = 0; i < N + 1; i++)
 		{
 			for (int j = 0; j < ALIGN_W; j++)
 			{
-				std::wcout << L'\u2550';
+				std::wcout << LINE_LR;
 			}
 			if (i < N)
 			{
-				std::wcout << L'\u256C';
+				std::wcout << LINE_TLBR;
 			}
 		}
-		std::wcout << L'\u2563' << '\n' << L'\u2551';
+		std::wcout << LINE_TBL << '\n' << LINE_TB;
 		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a2";
-		std::wcout << L'\u2551';
+		std::wcout << LINE_TB;
 	}
 	for (int i = 0; i < N; i++)
 	{
@@ -176,26 +187,26 @@ int wmain(int argc, wchar_t* argv[])
 		else
 		{
 			std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a2[i];
-			std::wcout << L'\u2551';
+			std::wcout << LINE_TB;
 		}
 	}
 	if (!autoui)
 	{
-		std::wcout << '\n' << L'\u2560';
+		std::wcout << '\n' << LINE_TBR;
 		for (int i = 0; i < N + 1; i++)
 		{
 			for (int j = 0; j < ALIGN_W; j++)
 			{
-				std::wcout << L'\u2550';
+				std::wcout << LINE_LR;
 			}
 			if (i < N)
 			{
-				std::wcout << L'\u256C';
+				std::wcout << LINE_TLBR;
 			}
 		}
-		std::wcout << L'\u2563' << '\n' << L'\u2551';
+		std::wcout << LINE_TBL << '\n' << LINE_TB;
 		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a1s";
-		std::wcout << L'\u2551';
+		std::wcout << LINE_TB;
 	}
 	for (int i = 0; i < N; i++)
 	{
@@ -210,24 +221,24 @@ int wmain(int argc, wchar_t* argv[])
 		else
 		{
 			std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a1s[i];
-			std::wcout << L'\u2551';
+			std::wcout << LINE_TB;
 		}
 	}
 	if (!autoui)
 	{
-		std::wcout << '\n' << L'\u255A';
+		std::wcout << '\n' << LINE_BR;
 		for (int i = 0; i < N+1; i++)
 		{
 			for (int j = 0; j < ALIGN_W; j++)
 			{
-				std::wcout << L'\u2550';
+				std::wcout << LINE_LR;
 			}
 			if (i < N)
 			{
-				std::wcout << L'\u2569';
+				std::wcout << LINE_TRL;
 			}
 		}
-		std::wcout << L'\u255D' << '\n';
+		std::wcout << LINE_BL << '\n';
 	}
 
 	for (auto elem : mn)

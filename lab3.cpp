@@ -174,6 +174,10 @@ int wmain(int argc, wchar_t* argv[])
 		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a2";
 		std::wcout << LINE_TB;
 	}
+	else 
+	{
+		std::wcout << '\n';
+	}
 	for (int i = 0; i < N; i++)
 	{
 		if (autoui)

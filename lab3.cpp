@@ -4,6 +4,90 @@
 #include <fcntl.h>
 #include <cmath>
 #include <algorithm>
+constexpr int N = 15, M = 5;
+constexpr wchar_t LINE_LR = L'\u2550';
+constexpr wchar_t LINE_TB = L'\u2551';
+constexpr wchar_t LINE_TR = L'\u2554';
+constexpr wchar_t LINE_TL = L'\u2557';
+constexpr wchar_t LINE_BR = L'\u255A';
+constexpr wchar_t LINE_BL = L'\u255D';
+constexpr wchar_t LINE_TBR = L'\u2560';
+constexpr wchar_t LINE_TBL = L'\u2563';
+constexpr wchar_t LINE_BRL = L'\u2566';
+constexpr wchar_t LINE_TRL = L'\u2569';
+constexpr wchar_t LINE_TLBR = L'\u256C';
+static void out_sep(int ALIGN_W, int LEN)
+{
+	std::wcout << '\n' << LINE_TBR;
+	for (int i = 0; i < LEN + 1; i++)
+	{
+		for (int j = 0; j < ALIGN_W; j++)
+		{
+			std::wcout << LINE_LR;
+		}
+		if (i < LEN)
+		{
+			std::wcout << LINE_TLBR;
+		}
+	}
+
+}
+
+static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
+{
+	std::wcout << LINE_TBL << '\n' << LINE_TB;
+	std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << name;
+	std::wcout << LINE_TB;
+	for (int i = 0; i < LEN; i++)
+	{
+		std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a[i];
+		std::wcout << LINE_TB;
+	}
+}
+
+static void out_table(int ALIGN_W, int LEN, int n, const char* const* const names, double** arrs)
+{
+	std::wcout << LINE_TR;
+	for (int i = 0; i < LEN + 1; i++)
+	{
+		for (int j = 0; j < ALIGN_W; j++)
+		{
+			std::wcout << LINE_LR;
+		}
+		if (i < LEN)
+		{
+			std::wcout << LINE_BRL;
+		}
+	}
+	std::wcout << LINE_TL << '\n' << LINE_TB;
+	std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "idx";
+	std::wcout << LINE_TB;
+	for (int i = 0; i < LEN; i++)
+	{
+		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << i;
+		std::wcout << LINE_TB;
+	}
+	out_sep(ALIGN_W,LEN);
+	for (int i = 0; i < n - 1; i++)
+	{
+		out_array(ALIGN_W,LEN, names[i], arrs[i]);
+		out_sep(ALIGN_W,LEN);
+	}
+	out_array(ALIGN_W,LEN, names[n - 1], arrs[n - 1]);
+	std::wcout << '\n' << LINE_BR;
+	for (int i = 0; i < LEN + 1; i++)
+	{
+		for (int j = 0; j < ALIGN_W; j++)
+		{
+			std::wcout << LINE_LR;
+		}
+		if (i < LEN)
+		{
+			std::wcout << LINE_TRL;
+		}
+	}
+	std::wcout << LINE_BL << '\n';
+}
 bool isPow2(double x)
 {
 	int exponent = 0;
@@ -26,18 +110,6 @@ static double f(double x, double a, double b, double c)
 		return x / c;
 	}
 }
-constexpr int N = 15, M = 5;
-constexpr wchar_t LINE_LR = L'\u2550';
-constexpr wchar_t LINE_TB = L'\u2551';
-constexpr wchar_t LINE_TR = L'\u2554';
-constexpr wchar_t LINE_TL = L'\u2557';
-constexpr wchar_t LINE_BR = L'\u255A';
-constexpr wchar_t LINE_BL = L'\u255D';
-constexpr wchar_t LINE_TBR = L'\u2560';
-constexpr wchar_t LINE_TBL = L'\u2563';
-constexpr wchar_t LINE_BRL = L'\u2566';
-constexpr wchar_t LINE_TRL = L'\u2569';
-constexpr wchar_t LINE_TLBR = L'\u256C';
 int wmain(int argc, wchar_t* argv[])
 {
 	if (!(_setmode(_fileno(stdout), _O_U8TEXT) && _setmode(_fileno(stdin), _O_U8TEXT) && _setmode(_fileno(stderr), _O_U8TEXT)))
@@ -97,44 +169,6 @@ int wmain(int argc, wchar_t* argv[])
 	double cur = 0;
 	int cnt = 0;
 	const int ALIGN_W = maxlen;
-	if (!autoui)
-	{
-		std::wcout << LINE_TR;
-		for (int i = 0; i < N+1; i++)
-		{
-			for (int j = 0; j < ALIGN_W; j++)
-			{
-				std::wcout << LINE_LR;
-			}
-			if (i < N)
-			{
-				std::wcout << LINE_BRL;
-			}
-		}
-		std::wcout << LINE_TL << '\n' << LINE_TB;
-		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "idx";
-		std::wcout << LINE_TB;
-		for (int i = 0; i < N; i++)
-		{
-			std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << i;
-			std::wcout << LINE_TB;
-		}
-		std::wcout << '\n' << LINE_TBR;
-		for (int i = 0; i < N+1; i++)
-		{
-			for (int j = 0; j < ALIGN_W; j++)
-			{
-				std::wcout << LINE_LR;
-			}
-			if (i < N)
-			{
-				std::wcout << LINE_TLBR;
-			}
-		}
-		std::wcout << LINE_TBL << '\n' << LINE_TB;
-		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a1";
-		std::wcout << LINE_TB;
-	}
 	for (int i = 0; i < N; i++)
 	{
 		if (i > 0 && a1s[i] == a1s[i - 1] && a1s[i] != cur)
@@ -142,186 +176,147 @@ int wmain(int argc, wchar_t* argv[])
 			cur = a1s[i];
 			cnt++;
 		}
-		if (autoui)
+	}
+	if (autoui)
+	{
+		for (int i = 0; i < N; i++)
 		{
 			std::wcout << a1[i];
-			if (i < N - 1)
+			if (i >= N - 1)
+			{
+				std::wcout << '\n';
+			}
+			else
 			{
 				std::wcout << ' ';
 			}
 		}
-		else
-		{
-			std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a1[i];
-			std::wcout << LINE_TB;
-		}
-	}
-	if (!autoui) 
-	{
-		std::wcout << '\n' << LINE_TBR;
-		for (int i = 0; i < N + 1; i++)
-		{
-			for (int j = 0; j < ALIGN_W; j++)
-			{
-				std::wcout << LINE_LR;
-			}
-			if (i < N)
-			{
-				std::wcout << LINE_TLBR;
-			}
-		}
-		std::wcout << LINE_TBL << '\n' << LINE_TB;
-		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a2";
-		std::wcout << LINE_TB;
-	}
-	else 
-	{
-		std::wcout << '\n';
-	}
-	for (int i = 0; i < N; i++)
-	{
-		if (autoui)
+		for (int i = 0; i < N; i++)
 		{
 			std::wcout << a2[i];
-			if (i < N - 1)
+			if (i >= N - 1)
+			{
+				std::wcout << '\n';
+			}
+			else
 			{
 				std::wcout << ' ';
 			}
 		}
-		else
+		for (auto elem : mn)
 		{
-			std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a2[i];
-			std::wcout << LINE_TB;
+			std::wcout << elem << '\n';
 		}
-	}
-	if (!autoui)
-	{
-		std::wcout << '\n' << LINE_TBR;
-		for (int i = 0; i < N + 1; i++)
-		{
-			for (int j = 0; j < ALIGN_W; j++)
-			{
-				std::wcout << LINE_LR;
-			}
-			if (i < N)
-			{
-				std::wcout << LINE_TLBR;
-			}
-		}
-		std::wcout << LINE_TBL << '\n' << LINE_TB;
-		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "a1s";
-		std::wcout << LINE_TB;
-	}
-	for (int i = 0; i < N; i++)
-	{
-		if (autoui)
+		for (int i = 0; i < N; i++)
 		{
 			std::wcout << a1s[i];
-			if (i < N - 1)
+			if (i >= N - 1)
+			{
+				std::wcout << '\n';
+			}
+			else
 			{
 				std::wcout << ' ';
 			}
 		}
-		else
+		std::wcout << cnt << '\n' << idx << '\n';
+		cnt = -1;
+		for (int i = 0; i < N; i++)
 		{
-			std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a1s[i];
-			std::wcout << LINE_TB;
-		}
-	}
-	if (!autoui)
-	{
-		std::wcout << '\n' << LINE_BR;
-		for (int i = 0; i < N+1; i++)
-		{
-			for (int j = 0; j < ALIGN_W; j++)
+			if (a1[i] < 0)
 			{
-				std::wcout << LINE_LR;
-			}
-			if (i < N)
-			{
-				std::wcout << LINE_TRL;
+				for (int j = 0; i < cnt; i++)
+				{
+					std::wcout << "0 ";
+				}
+				std::wcout << a1[i];
+				if (i < N - 1)
+				{
+					std::wcout << ' ';
+				}
 			}
 		}
-		std::wcout << LINE_BL << '\n';
-	}
-
-	for (auto elem : mn)
-	{
-		std::wcout << elem << '\n';
-	}
-	std::wcout << cnt << '\n' << idx << '\n';
-	cnt = 0;
-	for (int i = 0; i < N; i++)
-	{
-		if (a1[i] > 0)
+		for (int i = 0; i < N; i++)
 		{
-			for (int j = 0; i < cnt; i++)
+			if (a2[i] < 0)
 			{
-				std::wcout << "0 ";
-			}
-			std::wcout << a1[i];
-			if (i < N - 1)
-			{
-				std::wcout << ' ';
+				for (int j = 0; i < cnt; i++)
+				{
+					std::wcout << "0 ";
+				}
+				if (cnt != -1)
+				{
+					std::wcout << ' ';
+					cnt = 0;
+				}
+				std::wcout << a2[i];
+				if (i < N - 1)
+				{
+					std::wcout << ' ';
+				}
 			}
 		}
-	}
-	cnt = -1;
-	for (int i = 0; i < N; i++)
-	{
-		if (a2[i] > 0)
+		std::wcout << '\n';
+		cnt = -1;
+		for (int i = 0; i < N; i++)
 		{
-			for (int j = 0; i < cnt; i++)
+			if (a2[i] > 0)
 			{
-				std::wcout << "0 ";
-			}
-			if (cnt == -1)
-			{
-				std::wcout << ' ';
-				cnt = 0;
-			}
-			std::wcout << a2[i];
-			if (i < N - 1)
-			{
-				std::wcout << ' ';
+				for (int j = 0; i < cnt; i++)
+				{
+					std::wcout << "0 ";
+				}
+				std::wcout << a2[i];
+				if (i < N - 1)
+				{
+					std::wcout << ' ';
+				}
 			}
 		}
-	}
-	std::wcout << '\n';
-	for (int i = 0; i < N; i++)
-	{
-		if (a2[i] < 0)
+		for (int i = 0; i < N; i++)
 		{
-			for (int j = 0; i < cnt; i++)
+			if (a1[i] > 0)
 			{
-				std::wcout << "0 ";
-			}
-			std::wcout << a2[i];
-			if (i < N - 1)
-			{
-				std::wcout << ' ';
+				for (int j = 0; i < cnt; i++)
+				{
+					std::wcout << "0 ";
+				}
+				if (cnt != -1)
+				{
+					std::wcout << ' ';
+					cnt = 0;
+				}
+				std::wcout << a1[i];
+				if (i < N - 1)
+				{
+					std::wcout << ' ';
+				}
 			}
 		}
 	}
-	cnt = -1;
-	for (int i = 0; i < N; i++)
+	else
 	{
-		if (a1[i] < 0)
+		const char* const names[3] = { "a1","a2","a1s" };
+		double* arrs[3] = { a1,a2,a1s };
+		out_table(ALIGN_W, N, 3, names, arrs);
+		for (auto elem : mn)
 		{
-			for (int j = 0; i < cnt; i++)
-			{
-				std::wcout << "0 ";
-			}
-			if (cnt == -1)
-			{
-				std::wcout << ' ';
-				cnt = 0;
-			}
-			std::wcout << a1[i];
-			if (i < N - 1)
-			{
-				std::wcout << ' ';
-			}
+			std::wcout << elem << '\n';
 		}
+		std::wcout << cnt << '\n' << idx << '\n';
+		double apos[2 * N]{}, aneg[30]{};
+		for (int i = 0; i < N; i++)
+		{
+			apos[i] = std::max(a1[i], 0.0);
+			aneg[i] = std::min(a2[i], 0.0);
+		}
+		for (int i = 0; i < N; i++)
+		{
+			apos[N + i] = std::max(a2[i], 0.0);
+			aneg[N + i] = std::min(a1[i], 0.0);
+		}
+		const char* const names2[2] = { "pos","neg" };
+		double* arrs2[2] = { apos,aneg };
+		out_table(ALIGN_W, 2 * N, 2, names2, arrs2);
 	}
 }

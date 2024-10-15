@@ -155,7 +155,7 @@ int wmain(int argc, wchar_t* argv[])
 		{
 			mn[i / M] = a1[i];
 		}
-		if ((i == 0) || (a1[i] != 2 * a1[i - 1]))
+		if ((i == 0) || (!(isPow2(a1[i]) && isPow2(a1[i-1]))))
 		{
 			idx = -1;
 			if (isPow2(a1[i]))

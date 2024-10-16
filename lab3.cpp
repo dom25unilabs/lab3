@@ -266,15 +266,18 @@ int wmain(int argc, wchar_t* argv[])
 	int maxlen = 0;
 	for (int i = 0; i < N; i++)
 	{
+		double v1 = f(x1 + i * step, a, b, c), v2 = f(-x2 + i * step, a, b, c);
+		v1 = (abs(v1) < 0.005f ? 0 : v1);
+		v2 = (abs(v2) < 0.005f ? 0 : v2);
 		if (((aw | bw) & (aw | cw)) == 0)
 		{
-			a1[i] = std::round(f(x1 + i * step, a, b, c));
-			a2[i] = std::round(f(-x2 + i * step, a, b, c));
+			a1[i] = std::round(v1);
+			a2[i] = std::round(v2);
 		}
 		else
 		{
-			a1[i] = std::round(f(x1 + i * step, a, b, c) * 100) / 100.0;
-			a2[i] = std::round(f(-x2 + i * step, a, b, c) * 100) / 100.0;
+			a1[i] = std::round(v1 * 100) / 100.0;
+			a2[i] = std::round(v2 * 100) / 100.0;
 		}
 		if (a1[i] < mn[i / M])
 		{

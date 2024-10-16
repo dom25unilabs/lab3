@@ -29,11 +29,7 @@ static void out_sep(int ALIGN_W, int LEN)
 		{
 			std::wcout << LINE_TLBR;
 		}
-	}
-
-}
-
-static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
+	}}static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
 {
 	std::wcout << LINE_TBL << '\n' << LINE_TB;
 	std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << name;
@@ -43,9 +39,7 @@ static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
 		std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a[i];
 		std::wcout << LINE_TB;
 	}
-}
-
-static void out_table(int ALIGN_W, int LEN, int n, const char* const* const names, double** arrs)
+}static void out_table(int ALIGN_W, int LEN, int n, const char* const* const names, double** arrs)
 {
 	std::wcout << LINE_TR;
 	for (int i = 0; i < LEN + 1; i++)
@@ -67,13 +61,13 @@ static void out_table(int ALIGN_W, int LEN, int n, const char* const* const name
 		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << i;
 		std::wcout << LINE_TB;
 	}
-	out_sep(ALIGN_W,LEN);
+	out_sep(ALIGN_W, LEN);
 	for (int i = 0; i < n - 1; i++)
 	{
-		out_array(ALIGN_W,LEN, names[i], arrs[i]);
-		out_sep(ALIGN_W,LEN);
+		out_array(ALIGN_W, LEN, names[i], arrs[i]);
+		out_sep(ALIGN_W, LEN);
 	}
-	out_array(ALIGN_W,LEN, names[n - 1], arrs[n - 1]);
+	out_array(ALIGN_W, LEN, names[n - 1], arrs[n - 1]);
 	std::wcout << '\n' << LINE_BR;
 	for (int i = 0; i < LEN + 1; i++)
 	{
@@ -88,14 +82,136 @@ static void out_table(int ALIGN_W, int LEN, int n, const char* const* const name
 	}
 	std::wcout << LINE_BL << '\n';
 }
-bool isPow2(double x)
+static void autoui_out_array(int n, double* a)
+{
+	for (int i = 0; i < n; i++)
+	{
+		std::wcout << a[i];
+		if (i >= n - 1)
+		{
+			std::wcout << '\n';
+		}
+		else
+		{
+			std::wcout << ' ';
+		}
+	}
+}
+static void autoui_out_array2(int N, double* a1, double* a2)
+{
+	int cnt = 0;
+	for (int i = 0; i < N; i++)
+	{
+		if (a1[i] < 0)
+		{
+			for (int j = 0; i < cnt; i++)
+			{
+				std::wcout << "0 ";
+			}
+			cnt = 0;
+			std::wcout << a1[i];
+			if (i < N - 1)
+			{
+				std::wcout << ' ';
+			}
+			else
+			{
+				cnt = -2;
+			}
+		}
+		cnt++;
+	}	for (int i = 0; i < N; i++)
+	{
+		if (a2[i] < 0)
+		{			if (cnt == N)
+			{
+				cnt = 0;
+			}
+			else
+			{
+				std::wcout << ' ';
+			}
+			for (int j = 0; i < cnt; i++)
+			{
+				std::wcout << "0 ";
+			}
+			cnt = 0;
+			std::wcout << a2[i];
+			if (i < N - 1)
+			{
+				std::wcout << ' ';
+			}
+		}
+	}
+	if (cnt > 0)
+	{
+		for (int i = 0; i < cnt - 1; i++)
+		{
+			std::wcout << "0 ";
+		}
+		std::wcout << '0';
+	}
+	std::wcout << '\n';
+	cnt = 0;
+	for (int i = 0; i < N; i++)
+	{
+		if (a2[i] > 0)
+		{
+			for (int j = 0; i < cnt; i++)
+			{
+				std::wcout << "0 ";
+			}
+			cnt = 0;
+			std::wcout << a2[i];
+			if (i < N - 1)
+			{
+				std::wcout << ' ';
+			}
+			else
+			{
+				cnt = -2;
+			}
+		}
+		cnt++;
+	}	for (int i = 0; i < N; i++)
+	{
+		if (a1[i] > 0)
+		{			if (cnt == N)
+			{
+				cnt = 0;
+			}
+			else
+			{
+				std::wcout << ' ';
+			}
+			for (int j = 0; i < cnt; i++)
+			{
+				std::wcout << "0 ";
+			}
+			cnt = 0;
+			std::wcout << a1[i];
+			if (i < N - 1)
+			{
+				std::wcout << ' ';
+			}
+		}
+	}
+	if (cnt > 0)
+	{
+		for (int i = 0; i < cnt - 1; i++)
+		{
+			std::wcout << "0 ";
+		}
+		std::wcout << '0';
+	}
+	std::wcout << '\n';
+}
+static bool isPow2(double x)
 {
 	int exponent = 0;
 	auto mantissa1 = frexp(x, &exponent);
 	return mantissa1 == 0.5;
-}
-
-static double f(double x, double a, double b, double c)
+}static double f(double x, double a, double b, double c)
 {
 	if (x < 0 && b != 0)
 	{
@@ -124,8 +240,12 @@ int wmain(int argc, wchar_t* argv[])
 	int aw = a, bw = b, cw = c;
 	double a1[N]{}, a2[N]{};
 	double step = (x2 - x1 + 1) / N;
-	double mn[N / M]{ };
-	int idx = 0;
+	double mn[N / M];
+	for (int i = 0; i < (N / M); i++)
+	{
+		mn[i] = INFINITY;
+	}
+	int idx = -1;
 	double a1s[N]{};
 	int maxlen = 0;
 	for (int i = 0; i < N; i++)
@@ -134,41 +254,42 @@ int wmain(int argc, wchar_t* argv[])
 		{
 			a1[i] = std::round(f(x1 + i * step, a, b, c));
 			a2[i] = std::round(f(-x2 + i * step, a, b, c));
-
 		}
 		else
 		{
 			a1[i] = std::round(f(x1 + i * step, a, b, c) * 100) / 100.0;
 			a2[i] = std::round(f(-x2 + i * step, a, b, c) * 100) / 100.0;
 		}
-		int len = std::snprintf(nullptr, 0, "%.2f", a1[i]);
-		if (len > maxlen)
-		{
-			maxlen = len;
-		}
-		len = std::snprintf(nullptr, 0, "%.2f", a2[i]);
-		if (len > maxlen)
-		{
-			maxlen = len;
-		}
-		if (i % (N / M) == 0 || a1[i] < mn[i / M])
+		if (a1[i] < mn[i / M])
 		{
 			mn[i / M] = a1[i];
 		}
-		if ((i == 0) || (!(isPow2(a1[i]) && isPow2(a1[i-1]))))
+		if ((i == 0) || (!isPow2(a1[i])) || (!isPow2(a1[i - 1])) || (!(a1[i] > a1[i - 1])))
 		{
 			idx = -1;
-			if (isPow2(a1[i]))
-			{
-				idx = i;
-			}
+		}
+		else
+		{
+			idx = i;
 		}
 		a1s[i] = a1[i];
+		if (!autoui)
+		{
+			int len = std::snprintf(nullptr, 0, "%.2f", a1[i]);
+			if (len > maxlen)
+			{
+				maxlen = len;
+			}
+			len = std::snprintf(nullptr, 0, "%.2f", a2[i]);
+			if (len > maxlen)
+			{
+				maxlen = len;
+			}
+		}
 	}
 	std::sort(std::begin(a1s), std::end(a1s));
 	double cur = 0;
 	int cnt = 0;
-	const int ALIGN_W = maxlen;
 	for (int i = 0; i < N; i++)
 	{
 		if (i > 0 && a1s[i] == a1s[i - 1] && a1s[i] != cur)
@@ -179,132 +300,29 @@ int wmain(int argc, wchar_t* argv[])
 	}
 	if (autoui)
 	{
-		for (int i = 0; i < N; i++)
-		{
-			std::wcout << a1[i];
-			if (i >= N - 1)
-			{
-				std::wcout << '\n';
-			}
-			else
-			{
-				std::wcout << ' ';
-			}
-		}
-		for (int i = 0; i < N; i++)
-		{
-			std::wcout << a2[i];
-			if (i >= N - 1)
-			{
-				std::wcout << '\n';
-			}
-			else
-			{
-				std::wcout << ' ';
-			}
-		}
+		autoui_out_array(N, a1);
+		autoui_out_array(N, a2);
 		for (auto elem : mn)
 		{
 			std::wcout << elem << '\n';
 		}
-		for (int i = 0; i < N; i++)
-		{
-			std::wcout << a1s[i];
-			if (i >= N - 1)
-			{
-				std::wcout << '\n';
-			}
-			else
-			{
-				std::wcout << ' ';
-			}
-		}
+		autoui_out_array(N, a1s);
 		std::wcout << cnt << '\n' << idx << '\n';
-		cnt = -1;
-		for (int i = 0; i < N; i++)
-		{
-			if (a1[i] < 0)
-			{
-				for (int j = 0; i < cnt; i++)
-				{
-					std::wcout << "0 ";
-				}
-				std::wcout << a1[i];
-				if (i < N - 1)
-				{
-					std::wcout << ' ';
-				}
-			}
-		}
-		for (int i = 0; i < N; i++)
-		{
-			if (a2[i] < 0)
-			{
-				for (int j = 0; i < cnt; i++)
-				{
-					std::wcout << "0 ";
-				}
-				if (cnt != -1)
-				{
-					std::wcout << ' ';
-					cnt = 0;
-				}
-				std::wcout << a2[i];
-				if (i < N - 1)
-				{
-					std::wcout << ' ';
-				}
-			}
-		}
-		std::wcout << '\n';
-		cnt = -1;
-		for (int i = 0; i < N; i++)
-		{
-			if (a2[i] > 0)
-			{
-				for (int j = 0; i < cnt; i++)
-				{
-					std::wcout << "0 ";
-				}
-				std::wcout << a2[i];
-				if (i < N - 1)
-				{
-					std::wcout << ' ';
-				}
-			}
-		}
-		for (int i = 0; i < N; i++)
-		{
-			if (a1[i] > 0)
-			{
-				for (int j = 0; i < cnt; i++)
-				{
-					std::wcout << "0 ";
-				}
-				if (cnt != -1)
-				{
-					std::wcout << ' ';
-					cnt = 0;
-				}
-				std::wcout << a1[i];
-				if (i < N - 1)
-				{
-					std::wcout << ' ';
-				}
-			}
-		}
+		autoui_out_array2(N, a1, a2);
 	}
 	else
 	{
+		const int ALIGN_W = maxlen;
 		const char* const names[3] = { "a1","a2","a1s" };
 		double* arrs[3] = { a1,a2,a1s };
 		out_table(ALIGN_W, N, 3, names, arrs);
-		for (auto elem : mn)
+		for (int i = 0; i < (N / M); i++)
 		{
-			std::wcout << elem << '\n';
+			std::wcout << L"Минимум из подстроки a1[" << i * M << "..." << i * M + M - 1 << "]: " << mn[i] << '\n';
 		}
-		std::wcout << cnt << '\n' << idx << '\n';
-		double apos[2 * N]{}, aneg[30]{};
+		std::wcout << L"Количество чисел, встречающихся в a1 более одного раза: " << cnt << '\n';
+		std::wcout << L"Индекс начала подстроки массива, состоящей из возрастающих степеней двойки: " << idx << '\n';
+		double apos[2 * N]{}, aneg[2*N]{};
 		for (int i = 0; i < N; i++)
 		{
 			apos[i] = std::max(a1[i], 0.0);

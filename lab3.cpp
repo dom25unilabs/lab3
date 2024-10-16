@@ -142,10 +142,6 @@ static void autoui_out_array2(int N, double* a1, double* a2)
 			}
 			cnt = 0;
 			std::wcout << a2[i];
-			if (i < N - 1)
-			{
-				std::wcout << ' ';
-			}
 		}
 	}
 	if (cnt > 0)
@@ -197,10 +193,7 @@ static void autoui_out_array2(int N, double* a1, double* a2)
 			}
 			cnt = 0;
 			std::wcout << a1[i];
-			if (i < N - 1)
-			{
-				std::wcout << ' ';
-			}
+
 		}
 	}
 	if (cnt > 0)

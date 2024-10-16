@@ -29,7 +29,9 @@ static void out_sep(int ALIGN_W, int LEN)
 		{
 			std::wcout << LINE_TLBR;
 		}
-	}}static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
+	}
+}
+static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
 {
 	std::wcout << LINE_TBL << '\n' << LINE_TB;
 	std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << name;
@@ -39,7 +41,8 @@ static void out_sep(int ALIGN_W, int LEN)
 		std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a[i];
 		std::wcout << LINE_TB;
 	}
-}static void out_table(int ALIGN_W, int LEN, int n, const char* const* const names, double** arrs)
+}
+static void out_table(int ALIGN_W, int LEN, int n, const char* const* const names, double** arrs)
 {
 	std::wcout << LINE_TR;
 	for (int i = 0; i < LEN + 1; i++)
@@ -120,10 +123,12 @@ static void autoui_out_array2(int N, double* a1, double* a2)
 			}
 		}
 		cnt++;
-	}	for (int i = 0; i < N; i++)
+	}
+	for (int i = 0; i < N; i++)
 	{
 		if (a2[i] < 0)
-		{			if (cnt == N)
+		{
+			if (cnt == N)
 			{
 				cnt = 0;
 			}
@@ -173,10 +178,12 @@ static void autoui_out_array2(int N, double* a1, double* a2)
 			}
 		}
 		cnt++;
-	}	for (int i = 0; i < N; i++)
+	}
+	for (int i = 0; i < N; i++)
 	{
 		if (a1[i] > 0)
-		{			if (cnt == N)
+		{
+			if (cnt == N)
 			{
 				cnt = 0;
 			}
@@ -206,12 +213,28 @@ static void autoui_out_array2(int N, double* a1, double* a2)
 	}
 	std::wcout << '\n';
 }
+static void sort(int n, double* a)
+{
+	int i, j, min_idx;
+	for (i = 0; i < n - 1; i++)
+	{
+		min_idx = i;
+		for (j = i + 1; j < n; j++)
+		{
+			if (a[j] < a[min_idx])
+			{
+				min_idx = j;
+			}
+			std::swap(a[min_idx], a[i]);
+		}
+	}
+}
 static bool isPow2(double x)
 {
-	int exponent = 0;
-	auto mantissa1 = frexp(x, &exponent);
-	return mantissa1 == 0.5;
-}static double f(double x, double a, double b, double c)
+	long long ix = (long long)x;
+	return ix > 0 && (ix & (ix - 1)) == 0;
+}
+static double f(double x, double a, double b, double c)
 {
 	if (x < 0 && b != 0)
 	{
@@ -287,7 +310,7 @@ int wmain(int argc, wchar_t* argv[])
 			}
 		}
 	}
-	std::sort(std::begin(a1s), std::end(a1s));
+	sort(N, a1s);
 	double cur = 0;
 	int cnt = 0;
 	for (int i = 0; i < N; i++)
@@ -322,7 +345,7 @@ int wmain(int argc, wchar_t* argv[])
 		}
 		std::wcout << L"Количество чисел, встречающихся в a1 более одного раза: " << cnt << '\n';
 		std::wcout << L"Индекс начала подстроки массива, состоящей из возрастающих степеней двойки: " << idx << '\n';
-		double apos[2 * N]{}, aneg[2*N]{};
+		double apos[2 * N]{}, aneg[2 * N]{};
 		for (int i = 0; i < N; i++)
 		{
 			apos[i] = std::max(a1[i], 0.0);

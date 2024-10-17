@@ -218,8 +218,8 @@ static void sort(int n, double* a)
 			{
 				min_idx = j;
 			}
-			std::swap(a[min_idx], a[i]);
 		}
+		std::swap(a[min_idx], a[i]);
 	}
 }
 static bool isPow2(double x)

@@ -283,11 +283,7 @@ int wmain(int argc, wchar_t* argv[])
 		{
 			mn[i / M] = a1[i];
 		}
-		if ((i == 0) || (!isPow2(a1[i])) || (!isPow2(a1[i - 1])) || (!(a1[i] > a1[i - 1])))
-		{
-			idx = -1;
-		}
-		else
+		if ((i == 0) || (!isPow2(a1[i])) || (!isPow2(a1[i - 1])) || (a1[i] <= a1[i - 1]))
 		{
 			idx = i;
 		}
@@ -305,6 +301,10 @@ int wmain(int argc, wchar_t* argv[])
 				maxlen = len;
 			}
 		}
+	}
+	if (!isPow2(a1[idx]))
+	{
+		idx = -1;
 	}
 	sort(N, a1s);
 	double cur = 0;

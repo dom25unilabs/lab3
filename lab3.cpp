@@ -225,6 +225,7 @@ static void sort(int n, double* a)
 static bool isPow2(double x)
 {
 	long long ix = (long long)x;
+	if (ix != x) return 0;
 	return ix > 0 && (ix & (ix - 1)) == 0;
 }
 static double f(double x, double a, double b, double c)

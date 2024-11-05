@@ -308,15 +308,17 @@ int wmain(int argc, wchar_t* argv[])
 		idx = -1;
 	}
 	sort(N, a1s);
-	double cur = 0;
 	int cnt = 0;
-	for (int i = 0; i < N; i++)
+	for (int i = 1; i < N - 1; i++)
 	{
-		if (i > 0 && a1s[i] == a1s[i - 1] && a1s[i] != cur)
+		if (a1s[i - 1] == a1s[i] && a1s[i] != a1s[i + 1])
 		{
-			cur = a1s[i];
 			cnt++;
 		}
+	}
+	if (a1s[N - 1] == a1s[N - 2])
+	{
+		cnt++;
 	}
 	if (autoui)
 	{

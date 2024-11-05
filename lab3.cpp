@@ -196,14 +196,6 @@ static void autoui_out_array2(int N, double* a1, double* a2)
 
 		}
 	}
-	if (cnt > 0)
-	{
-		for (int i = 0; i < cnt - 1; i++)
-		{
-			std::wcout << "0 ";
-		}
-		std::wcout << '0';
-	}
 	std::wcout << '\n';
 }
 static void sort(int n, double* a)

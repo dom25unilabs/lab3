@@ -31,54 +31,54 @@ static void out_sep(int ALIGN_W, int LEN)
 		}
 	}
 }
-static void out_array(int ALIGN_W, int LEN, const char* const name, double* a)
+static void out_array(int align_w, int len, const char* const name, double* a)
 {
 	std::wcout << LINE_TBL << '\n' << LINE_TB;
-	std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << name;
+	std::wcout << std::left << std::setw(align_w) << std::setfill(L' ') << name;
 	std::wcout << LINE_TB;
-	for (int i = 0; i < LEN; i++)
+	for (int i = 0; i < len; i++)
 	{
-		std::wcout << std::right << std::setw(ALIGN_W) << std::setfill(L' ') << a[i];
+		std::wcout << std::right << std::setw(align_w) << std::setfill(L' ') << a[i];
 		std::wcout << LINE_TB;
 	}
 }
-static void out_table(int ALIGN_W, int LEN, int n, const char* const* const names, double** arrs)
+static void out_table(int align_w, int len, int n, const char* const* const names, double** arrs)
 {
 	std::wcout << LINE_TR;
-	for (int i = 0; i < LEN + 1; i++)
+	for (int i = 0; i < len + 1; i++)
 	{
-		for (int j = 0; j < ALIGN_W; j++)
+		for (int j = 0; j < align_w; j++)
 		{
 			std::wcout << LINE_LR;
 		}
-		if (i < LEN)
+		if (i < len)
 		{
 			std::wcout << LINE_BRL;
 		}
 	}
 	std::wcout << LINE_TL << '\n' << LINE_TB;
-	std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << "idx";
+	std::wcout << std::left << std::setw(align_w) << std::setfill(L' ') << "idx";
 	std::wcout << LINE_TB;
-	for (int i = 0; i < LEN; i++)
+	for (int i = 0; i < len; i++)
 	{
-		std::wcout << std::left << std::setw(ALIGN_W) << std::setfill(L' ') << i;
+		std::wcout << std::left << std::setw(align_w) << std::setfill(L' ') << i;
 		std::wcout << LINE_TB;
 	}
-	out_sep(ALIGN_W, LEN);
+	out_sep(align_w, len);
 	for (int i = 0; i < n - 1; i++)
 	{
-		out_array(ALIGN_W, LEN, names[i], arrs[i]);
-		out_sep(ALIGN_W, LEN);
+		out_array(align_w, len, names[i], arrs[i]);
+		out_sep(align_w, len);
 	}
-	out_array(ALIGN_W, LEN, names[n - 1], arrs[n - 1]);
+	out_array(align_w, len, names[n - 1], arrs[n - 1]);
 	std::wcout << '\n' << LINE_BR;
-	for (int i = 0; i < LEN + 1; i++)
+	for (int i = 0; i < len + 1; i++)
 	{
-		for (int j = 0; j < ALIGN_W; j++)
+		for (int j = 0; j < align_w; j++)
 		{
 			std::wcout << LINE_LR;
 		}
-		if (i < LEN)
+		if (i < len)
 		{
 			std::wcout << LINE_TRL;
 		}
@@ -100,92 +100,93 @@ static void autoui_out_array(int n, double* a)
 		}
 	}
 }
-static void autoui_out_array2(int N, double* a1, double* a2)
+static void autoui_out_array2(int n, double* a1, double* a2)
 {
 	int cnt = 0;
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (a1[i] < 0)
 		{
-			for (int j = 0; i < cnt; i++)
+			if (cnt > 0)
 			{
-				std::wcout << "0 ";
+				for (int j = 0; j < cnt; j++)
+				{
+					std::wcout << "0 ";
+				}
+				cnt = 0;
 			}
-			cnt = 0;
 			std::wcout << a1[i];
-			if (i < N - 1)
+			if (i < n - 1)
 			{
 				std::wcout << ' ';
 			}
-			else
-			{
-				cnt = -2;
-			}
 		}
-		cnt++;
+		else
+		{
+			cnt++;
+		}
 	}
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (a2[i] < 0)
 		{
-			if (cnt == N)
+			if ((cnt > 0) && (cnt < n - 1))
 			{
+				for (int j = 0; j < cnt; j++)
+				{
+					std::wcout << "0 ";
+				}
 				cnt = 0;
 			}
-			else
+			std::wcout << a2[i];
+			if (i < n - 1)
 			{
 				std::wcout << ' ';
 			}
-			for (int j = 0; i < cnt; i++)
-			{
-				std::wcout << "0 ";
-			}
-			cnt = 0;
-			std::wcout << a2[i];
 		}
 	}
 	std::wcout << '\n';
 	cnt = 0;
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (a2[i] > 0)
 		{
-			for (int j = 0; i < cnt; i++)
+			if (cnt > 0)
 			{
-				std::wcout << "0 ";
+				for (int j = 0; j < cnt; j++)
+				{
+					std::wcout << "0 ";
+				}
+				cnt = 0;
 			}
-			cnt = 0;
 			std::wcout << a2[i];
-			if (i < N - 1)
+			if (i < n - 1)
 			{
 				std::wcout << ' ';
 			}
-			else
-			{
-				cnt = -2;
-			}
 		}
-		cnt++;
+		else
+		{
+			cnt++;
+		}
 	}
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (a1[i] > 0)
 		{
-			if (cnt == N)
+			if ((cnt > 0) && (cnt < n - 1))
 			{
+				for (int j = 0; j < cnt; j++)
+				{
+					std::wcout << "0 ";
+				}
 				cnt = 0;
 			}
-			else
+			std::wcout << a1[i];
+			if (i < n - 1)
 			{
 				std::wcout << ' ';
 			}
-			for (int j = 0; i < cnt; i++)
-			{
-				std::wcout << "0 ";
-			}
-			cnt = 0;
-			std::wcout << a1[i];
-
 		}
 	}
 	std::wcout << '\n';

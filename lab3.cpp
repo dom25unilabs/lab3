@@ -103,91 +103,89 @@ static void autoui_out_array(int n, double* a)
 static void autoui_out_array2(int n, double* a1, double* a2)
 {
 	int cnt = 0;
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < N; i++)
 	{
 		if (a1[i] < 0)
 		{
-			if (cnt > 0)
-			{
-				for (int j = 0; j < cnt; j++)
-				{
-					std::wcout << "0 ";
-				}
-				cnt = 0;
-			}
 			std::wcout << a1[i];
-			if (i < n - 1)
+			if (i != N - 1)
 			{
 				std::wcout << ' ';
 			}
-		}
-		else
-		{
 			cnt++;
 		}
 	}
-	for (int i = 0; i < n; i++)
+	bool second = false;
+	for (int i = 0; i < N; i++)
 	{
 		if (a2[i] < 0)
 		{
-			if ((cnt > 0) && (cnt < n - 1))
+			if (!second)
 			{
-				for (int j = 0; j < cnt; j++)
+				if (cnt > 0)
 				{
-					std::wcout << "0 ";
+					std::wcout << ' ';
 				}
-				cnt = 0;
+				second = !second;
 			}
 			std::wcout << a2[i];
-			if (i < n - 1)
+			if (i != N - 1)
 			{
 				std::wcout << ' ';
 			}
-		}
-	}
-	std::wcout << '\n';
-	cnt = 0;
-	for (int i = 0; i < n; i++)
-	{
-		if (a2[i] > 0)
-		{
-			if (cnt > 0)
-			{
-				for (int j = 0; j < cnt; j++)
-				{
-					std::wcout << "0 ";
-				}
-				cnt = 0;
-			}
-			std::wcout << a2[i];
-			if (i < n - 1)
-			{
-				std::wcout << ' ';
-			}
-		}
-		else
-		{
 			cnt++;
 		}
 	}
-	for (int i = 0; i < n; i++)
+	if (cnt < 15)
 	{
-		if (a1[i] > 0)
+		for (int i = cnt; i < 15; i++)
 		{
-			if ((cnt > 0) && (cnt < n - 1))
-			{
-				for (int j = 0; j < cnt; j++)
-				{
-					std::wcout << "0 ";
-				}
-				cnt = 0;
-			}
-			std::wcout << a1[i];
-			if (i < n - 1)
+			std::wcout << "0 ";
+		}
+		cnt = 0;
+	}
+	std::wcout << '\n';
+	cnt = 0;
+	for (int i = 0; i < N; i++)
+	{
+		if (a2[i] > 0)
+		{
+			std::wcout << a2[i];
+			if (i != N - 1)
 			{
 				std::wcout << ' ';
 			}
+			cnt++;
 		}
+	}
+	second = false;
+	for (int i = 0; i < N; i++)
+	{
+		if (a1[i] > 0)
+		{
+			if (!second)
+			{
+				if (cnt > 0)
+				{
+					std::wcout << ' ';
+				}
+				second = !second;
+			}
+			std::wcout << a1[i];
+			if (i != N - 1)
+			{
+				std::wcout << ' ';
+			}
+			cnt++;
+		}
+	}
+	if (cnt < 15)
+	{
+		for (int i = cnt; i < 15; i++)
+		{
+			std::wcout << "0 ";
+		}
+		cnt = 0;
 	}
 	std::wcout << '\n';
 }

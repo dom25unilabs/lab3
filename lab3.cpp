@@ -107,32 +107,23 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	{
 		if (a1[i] < 0)
 		{
-			std::wcout << a1[i];
-			if (i != N - 1)
+			if (i > 0)
 			{
 				std::wcout << ' ';
 			}
+			std::wcout << a1[i];
 			cnt++;
 		}
 	}
-	bool second = false;
 	for (int i = 0; i < N; i++)
 	{
 		if (a2[i] < 0)
 		{
-			if (!second)
-			{
-				if (cnt > 0)
-				{
-					std::wcout << ' ';
-				}
-				second = !second;
-			}
-			std::wcout << a2[i];
-			if (i != N - 1)
+			if (cnt > 0)
 			{
 				std::wcout << ' ';
 			}
+			std::wcout << a2[i];
 			cnt++;
 		}
 	}
@@ -140,7 +131,7 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	{
 		for (int i = cnt; i < 15; i++)
 		{
-			std::wcout << "0 ";
+			std::wcout << " 0";
 		}
 		cnt = 0;
 	}
@@ -150,32 +141,23 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	{
 		if (a2[i] > 0)
 		{
-			std::wcout << a2[i];
-			if (i != N - 1)
+			if (i > 0)
 			{
 				std::wcout << ' ';
 			}
+			std::wcout << a2[i];
 			cnt++;
 		}
 	}
-	second = false;
 	for (int i = 0; i < N; i++)
 	{
 		if (a1[i] > 0)
 		{
-			if (!second)
-			{
-				if (cnt > 0)
-				{
-					std::wcout << ' ';
-				}
-				second = !second;
-			}
-			std::wcout << a1[i];
-			if (i != N - 1)
+			if (cnt > 0)
 			{
 				std::wcout << ' ';
 			}
+			std::wcout << a1[i];
 			cnt++;
 		}
 	}
@@ -183,7 +165,7 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	{
 		for (int i = cnt; i < 15; i++)
 		{
-			std::wcout << "0 ";
+			std::wcout << " 0";
 		}
 		cnt = 0;
 	}

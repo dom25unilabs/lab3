@@ -107,7 +107,7 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	{
 		if (a1[i] < 0)
 		{
-			if (i > 0)
+			if (cnt > 0)
 			{
 				std::wcout << ' ';
 			}
@@ -141,7 +141,7 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	{
 		if (a2[i] > 0)
 		{
-			if (i > 0)
+			if (cnt > 0)
 			{
 				std::wcout << ' ';
 			}

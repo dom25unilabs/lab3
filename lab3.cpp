@@ -219,10 +219,10 @@ int wmain(int argc, wchar_t* argv[])
 	}
 	double x1, x2, a, b, c;
 	std::wcin >> x1 >> x2 >> a >> b >> c;
-	int aw = a, bw = b, cw = c;
+	bool usewhole = ((((int)a) | ((int)b)) & (((int)a) | ((int)c))) == 0;
 	double a1[N]{}, a2[N]{};
-	double step = (x2 - x1 + 1) / N;
-	double mn[N / M];
+	double step = (x2 - x1) / (N-1);
+	double mn[N / M]{};
 	for (int i = 0; i < (N / M); i++)
 	{
 		mn[i] = INFINITY;
@@ -235,7 +235,7 @@ int wmain(int argc, wchar_t* argv[])
 		double v1 = f(x1 + i * step, a, b, c), v2 = f(-x2 + i * step, a, b, c);
 		v1 = (abs(v1) < 0.005f ? 0 : v1);
 		v2 = (abs(v2) < 0.005f ? 0 : v2);
-		if (((aw | bw) & (aw | cw)) == 0)
+		if (usewhole)
 		{
 			a1[i] = std::round(v1);
 			a2[i] = std::round(v2);

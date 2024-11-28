@@ -129,6 +129,11 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	}
 	if (cnt < 15)
 	{
+		if (cnt == 0)
+		{
+			cnt++;
+			std::wcout << '0';
+		}
 		for (int i = cnt; i < 15; i++)
 		{
 			std::wcout << " 0";
@@ -163,6 +168,11 @@ static void autoui_out_array2(int n, double* a1, double* a2)
 	}
 	if (cnt < 15)
 	{
+		if (cnt == 0)
+		{
+			cnt++;
+			std::wcout << '0';
+		}
 		for (int i = cnt; i < 15; i++)
 		{
 			std::wcout << " 0";

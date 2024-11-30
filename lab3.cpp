@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <cmath>
 #include <algorithm>
+#include <format>
 constexpr int N = 15, M = 5;
 constexpr wchar_t LINE_LR = L'\u2550';
 constexpr wchar_t LINE_TB = L'\u2551';
@@ -16,69 +17,70 @@ constexpr wchar_t LINE_TBL = L'\u2563';
 constexpr wchar_t LINE_BRL = L'\u2566';
 constexpr wchar_t LINE_TRL = L'\u2569';
 constexpr wchar_t LINE_TLBR = L'\u256C';
-static void out_sep(int ALIGN_W, int LEN)
+static void out_sep(int align_w, int len)
 {
-	std::wcout << '\n' << LINE_TBR;
-	for (int i = 0; i < LEN + 1; i++)
+	std::wcout << LINE_TBR;
+	for (int i = 0; i < len; i++)
 	{
-		for (int j = 0; j < ALIGN_W; j++)
+		for (int j = 0; j < align_w; j++)
 		{
 			std::wcout << LINE_LR;
 		}
-		if (i < LEN)
+		if (i < len - 1)
 		{
 			std::wcout << LINE_TLBR;
 		}
 	}
+	std::wcout << LINE_TBL << '\n';
 }
-static void out_array(int align_w, int len, const char* const name, double* a)
-{
-	std::wcout << LINE_TBL << '\n' << LINE_TB;
-	std::wcout << std::left << std::setw(align_w) << std::setfill(L' ') << name;
-	std::wcout << LINE_TB;
-	for (int i = 0; i < len; i++)
-	{
-		std::wcout << std::right << std::setw(align_w) << std::setfill(L' ') << a[i];
-		std::wcout << LINE_TB;
-	}
-}
-static void out_table(int align_w, int len, int n, const char* const* const names, double** arrs)
+static void out_header(int align_w, int len, const char* const* const names, std::wstring format_str_c, std::wstring format_str_r)
 {
 	std::wcout << LINE_TR;
-	for (int i = 0; i < len + 1; i++)
+	for (int i = 0; i < len; i++)
 	{
 		for (int j = 0; j < align_w; j++)
 		{
 			std::wcout << LINE_LR;
 		}
-		if (i < len)
+		if (i < len - 1)
 		{
 			std::wcout << LINE_BRL;
 		}
 	}
-	std::wcout << LINE_TL << '\n' << LINE_TB;
-	std::wcout << std::left << std::setw(align_w) << std::setfill(L' ') << "idx";
-	std::wcout << LINE_TB;
+	std::wcout << LINE_TL << '\n';
+	std::wstring wsname(names[0], names[0] + strlen(names[0]));
+	std::wcout << std::vformat(format_str_r, std::make_wformat_args(wsname));
+	for (int i = 1; i < len; i++)
+	{
+		std::wstring wsname(names[i], names[i] + strlen(names[i]));
+		std::wcout << std::vformat(format_str_c, std::make_wformat_args(wsname));
+	}
+	std::wcout << LINE_TB << '\n';
+}
+
+static void out_table(int align_w, int len, int n, const char* const* const names, double** arrs)
+{
+	std::wstring format_str_c = std::format(L"{1}{{:^{0}}}", align_w, LINE_TB);
+	std::wstring format_str_r = std::format(L"{1}{{:>{0}}}", align_w, LINE_TB);
+	out_header(align_w, n, names, format_str_c, format_str_r);
 	for (int i = 0; i < len; i++)
 	{
-		std::wcout << std::left << std::setw(align_w) << std::setfill(L' ') << i;
-		std::wcout << LINE_TB;
+		out_sep(align_w, n);
+		std::wcout << std::vformat(format_str_r, std::make_wformat_args(arrs[0][i]));
+		for (int j = 1; j < n; j++)
+		{
+			std::wcout << std::vformat(format_str_c, std::make_wformat_args(arrs[j][i]));
+		}
+		std::wcout << LINE_TB << '\n';
 	}
-	out_sep(align_w, len);
-	for (int i = 0; i < n - 1; i++)
-	{
-		out_array(align_w, len, names[i], arrs[i]);
-		out_sep(align_w, len);
-	}
-	out_array(align_w, len, names[n - 1], arrs[n - 1]);
-	std::wcout << '\n' << LINE_BR;
-	for (int i = 0; i < len + 1; i++)
+	std::wcout << LINE_BR;
+	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < align_w; j++)
 		{
 			std::wcout << LINE_LR;
 		}
-		if (i < len)
+		if (i < n - 1)
 		{
 			std::wcout << LINE_TRL;
 		}
@@ -230,8 +232,8 @@ int wmain(int argc, wchar_t* argv[])
 	double x1, x2, a, b, c;
 	std::wcin >> x1 >> x2 >> a >> b >> c;
 	bool usewhole = ((((int)a) | ((int)b)) & (((int)a) | ((int)c))) == 0;
-	double a1[N]{}, a2[N]{};
-	double step = (x2 - x1) / (N-1);
+	double a1[N]{}, a2[N]{}, raw[N]{};
+	double step = (x2 - x1) / (N - 1);
 	double mn[N / M]{};
 	for (int i = 0; i < (N / M); i++)
 	{
@@ -242,6 +244,7 @@ int wmain(int argc, wchar_t* argv[])
 	int maxlen = 0;
 	for (int i = 0; i < N; i++)
 	{
+		raw[i] = x1 + i * step;
 		double v1 = f(x1 + i * step, a, b, c), v2 = f(-x2 + i * step, a, b, c);
 		v1 = (abs(v1) < 0.005f ? 0 : v1);
 		v2 = (abs(v2) < 0.005f ? 0 : v2);
@@ -310,9 +313,9 @@ int wmain(int argc, wchar_t* argv[])
 	else
 	{
 		const int ALIGN_W = maxlen;
-		const char* const names[3] = { "a1","a2","a1s" };
-		double* arrs[3] = { a1,a2,a1s };
-		out_table(ALIGN_W, N, 3, names, arrs);
+		const char* const names[4] = { "X","a1","a2","a1s" };
+		double* arrs[4] = { raw,a1,a2,a1s };
+		out_table(ALIGN_W, N, 4, names, arrs);
 		for (int i = 0; i < (N / M); i++)
 		{
 			std::wcout << L"Минимум из подстроки a1[" << i * M << "..." << i * M + M - 1 << "]: " << mn[i] << '\n';
